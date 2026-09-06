@@ -1,0 +1,340 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.4/dist/sweetalert2.all.min.js"></script>
+    <title>Happy Birthday</title>
+    <link rel="stylesheet" href="https://dekatutorial.github.io/spl/s.css" />
+    <script src="https://dekatutorial.github.io/spl/s.js"></script>
+    
+    <style>
+      /* Style untuk Popup PIN Lucu */
+      .pin-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(255, 192, 203, 0.85); /* Pink pastel transparan */
+        backdrop-filter: blur(8px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 99999;
+        opacity: 0; pointer-events: none;
+        transition: all 0.4s ease;
+      }
+      .pin-overlay.active {
+        opacity: 1; pointer-events: auto;
+      }
+      .pin-box {
+        background: #fff;
+        padding: 30px;
+        border-radius: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        text-align: center;
+        max-width: 320px;
+        width: 90%;
+        border: 4px solid #ffccd5;
+        transform: scale(0.8);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .pin-overlay.active .pin-box {
+        transform: scale(1);
+      }
+      .pin-title {
+        font-family: 'Ubuntu', sans-serif;
+        font-weight: 700;
+        color: #ff6b81;
+        margin-bottom: 5px;
+        font-size: 20px;
+      }
+      .pin-subtitle {
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 20px;
+      }
+      /* Indikator Titik PIN */
+      .pin-dots {
+        display: flex; justify-content: center; gap: 12px; margin-bottom: 25px;
+      }
+      .dot {
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        border: 2px solid #ddd;
+        transition: all 0.2s ease;
+      }
+      .dot.filled {
+        background: #ff6b81;
+        border-color: #ff6b81;
+        transform: scale(1.2);
+      }
+      .dot.error {
+        background: #ff4757 !important;
+        border-color: #ff4757 !important;
+      }
+      /* Grid Tombol Angka Bulat */
+      .pin-pad {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; justify-items: center;
+      }
+      .pin-btn {
+        width: 60px; height: 60px;
+        border-radius: 50%;
+        background: #fff0f2;
+        border: 3px solid #ffccd5;
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 22px; font-weight: 700; color: #ff6b81;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.1s ease;
+        box-shadow: 0 4px 0 #ffb3c1;
+        user-select: none;
+      }
+      .pin-btn:active {
+        transform: translateY(4px);
+        box-shadow: 0 0px 0 #ffb3c1;
+        background: #ffccd5;
+      }
+      .pin-btn.clear {
+        background: #f1f2f6; border-color: #ced6e0; color: #57606f; box-shadow: 0 4px 0 #ced6e0;
+      }
+      .pin-btn.clear:active { box-shadow: 0 0px 0 #ced6e0; background: #ced6e0; }
+      
+      /* Tombol khusus centang verifikasi */
+      .pin-btn.verify {
+        background: #e3faf2; border-color: #a3e9d2; color: #0ca678; box-shadow: 0 4px 0 #a3e9d2;
+      }
+      .pin-btn.verify:active { box-shadow: 0 0px 0 #a3e9d2; background: #a3e9d2; }
+      
+      /* Animasi Getar jika salah */
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-8px); }
+        75% { transform: translateX(8px); }
+      }
+      .shake { animation: shake 0.3s ease-in-out; }
+    </style>
+  </head>
+  <body>
+<?php date_default_timezone_set('Asia/Jakarta'); if(isset($_POST['pesan'])){ $fp = fopen('p.txt', 'a'); fwrite($fp, '
+<div class="cp"><p><span>Pesan :</span><br />'.$_POST['pesan'].'</p><h6>'.date("d-M-Y (H:i)").'</h6></div>'); echo json_encode(array("s"=>200)); fclose($fp); die; } if(isset($_POST['d'])){ $fa = fopen('p.txt', 'a'); fwrite($fa,$_POST['d']); echo json_encode(array("s"=>200)); fclose($fa); die; } if(isset($_GET['d'])){ $fa = fopen('p.txt', 'a'); fclose($fa); $fr = fopen('p.txt', 'r'); echo json_encode(array("d"=>fgets($fr))); fclose($fr); die; } ?> <!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>Order Custom di Deka Tutorial</title> <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.4/dist/sweetalert2.all.min.js"></script> <script src="https://dekatutorial.github.io/crd/s.js"></script> <link rel="stylesheet" type="text/css" href="https://dekatutorial.github.io/crd/s.css" /> </head> <body> <?php if(isset($_GET['pesan'])){ echo "<div id='ccp'>"; $fp = fopen('p.txt', 'r'); fgets($fp); while(!feof($fp)){ echo "".fgets($fp); } fclose($fp); echo "</div></body></html>"; die; } ?> <script>dt()</script>
+    
+    <div class="ctnr">
+      <div class="lv" id="loveBtn">
+        <img src="https://dekatutorial.github.io/crd/lv.svg" />
+        <p>Klik Love-nya</p>
+      </div>
+      <div class="ctn">
+        <button class="btn next">[ Lanjut ]</button>
+        <button class="btn send">[ Kirim Pesan ]</button>
+      </div>
+    </div>
+
+    <!-- Elemen Pop-up PIN Pad -->
+    <div class="pin-overlay" id="pinOverlay">
+      <div class="pin-box" id="pinBox">
+        <div class="pin-title">Masukkan PIN 🔐</div>
+        <div class="pin-subtitle">Ketik password rahasia dulu ya!</div>
+        
+        <div class="pin-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+
+        <div class="pin-pad">
+          <div class="pin-btn" onclick="pressKey('1')">1</div>
+          <div class="pin-btn" onclick="pressKey('2')">2</div>
+          <div class="pin-btn" onclick="pressKey('3')">3</div>
+          <div class="pin-btn" onclick="pressKey('4')">4</div>
+          <div class="pin-btn" onclick="pressKey('5')">5</div>
+          <div class="pin-btn" onclick="pressKey('6')">6</div>
+          <div class="pin-btn" onclick="pressKey('7')">7</div>
+          <div class="pin-btn" onclick="pressKey('8')">8</div>
+          <div class="pin-btn" onclick="pressKey('9')">9</div>
+          <div class="pin-btn clear" onclick="pressKey('⌫')">⌫</div>
+          <div class="pin-btn" onclick="pressKey('0')">0</div>
+          <div class="pin-btn verify" onclick="pressKey('✓')">✓</div>
+        </div>
+      </div>
+    </div>
+
+<script>
+/*=========================
+Mau custom web ucapan online? Order Aja di Deka Tutorial !! (DM untuk order)
++ Youtube: Deka Tutorial
++ Tiktok: @deka_tutorial
++ Instagram: deka_tutorial
+=========================*/
+
+konten = [
+  {
+    gambar: "Stiker 9.gif",
+    ucapan: "Hai Rel, Hmmm hari ini hari apa yaa?",
+  },
+  {
+    gambar: "stiker1.gif",
+    ucapan: "Hmm, sepertinya hari ini hari yang spesial buat kamu ya?",
+  },
+  {
+    gambar: "Stiker 13.gif",
+    ucapan: "Huuu, dasar bocil Roblox",
+  },
+  {
+    gambar: "Stiker 22.gif",
+    ucapan: "Bercanda Rel, jangan nangis ya",
+  },
+  {
+    gambar: "Stiker 28.gif",
+    ucapan: "Happy Birthday Rel 🥳 (pakek bhs inggris, kan prodi bahasa inggris ~Asikkk 😭)",
+  },
+  {
+    gambar: "Stiker 44.gif",
+    ucapan: "Huuu, Syududu kamu",
+  },
+  {
+    gambar: "Stiker 8.gif",
+    ucapan: "Semoga kamu diberikan kesehatan (terutama mental, agak ini soalnya kamu)",
+  },
+  {
+    gambar: "Stiker 4.gif",
+    ucapan: "Semoga kamu selalu dilancarkan rezekinya",
+  },
+  {
+    gambar: "Stiker 16.gif",
+    ucapan: "Dipermudah urusannya dan selamat sampai semester 8 tanpa perlu ke psikolog",
+  },
+  {
+    gambar: "Stiker 29.gif",
+    ucapan: "Semoga apa yang kamu inginkan bisa tercapai",
+  },
+      gambar: "Stiker 5.gif",
+    ucapan: "Bahagia selalu meski akan sering aku bully",
+  },
+  {
+    gambar: "Stiker 23.gif",
+    ucapan: "Semoga diberikan umur yang barokah",
+  },
+  {
+    gambar: "Stiker 10.gif",
+    ucapan: "Yang terakhir, semoga Husnul Khatimah (gak salah kan?)",
+  },
+  {
+    gambar: "Stiker 34.gif",
+    ucapan: "Mau jalan-jalan gak rel, (jalan-jalan cuman kita berdua...)",
+  },
+   {
+    gambar: "Stiker 36.gif",
+    ucapan: "Udah itu aja",
+  },
+    {
+    gambar: "Stiker 46.gif",
+    ucapan: "See You",
+  },
+  {
+    gambar: "kid.gif",
+    ucapan: "Aku Kaito Kid, semoga aku tidak mencuri sesuatu darimu",
+  },
+      gambar: "Stiker 5.gif",
+    ucapan: "(14) - (1) - (8) - (9) - (1) - (18) (🔄) ",
+  },
+];
+
+musik = "musik1.mp3";
+nomorWhatsapp = "+6287731557733";
+
+/*=========================*/
+</script>
+<script> 
+  // Panggil fungsi utama bawaan agar tombol love & loading selesai dengan benar
+  DekaTutorial(konten, musik, nomorWhatsapp); 
+
+  // Mengamankan musik bawaan agar tidak berbunyi dulu saat inisialisasi awal
+  if (typeof audio !== 'undefined') {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
+  // Logika Intersepsi PIN password tambahan
+  let currentPin = "";
+  const correctPin = "070909";
+  const overlay = document.getElementById("pinOverlay");
+  const pinBox = document.getElementById("pinBox");
+  const dots = document.querySelectorAll(".dot");
+  const mainLoveBtn = document.getElementById("loveBtn");
+
+  let pinVerified = false;
+
+  // Tangkap event click sebelum masuk ke fungsi bawaan DekaTutorial
+  mainLoveBtn.addEventListener("click", function(e) {
+    if (!pinVerified) {
+      e.stopPropagation(); // Stop musik & stiker otomatis bawaan agar tidak langsung muncul
+      overlay.classList.add("active");
+    }
+  }, true); // Menggunakan capture mode 'true' agar dieksekusi paling awal
+
+  function pressKey(key) {
+    if (key === "⌫") {
+      currentPin = currentPin.slice(0, -1);
+      updateDots();
+    } else if (key === "✓") {
+      // PROSES VERIFIKASI MANUAL SAAT TOMBOL CENTANG DIKLIK
+      verifyPinAction();
+    } else {
+      if (currentPin.length < 6) {
+        currentPin += key;
+        updateDots();
+      }
+    }
+  }
+
+  function verifyPinAction() {
+    // Cek apakah PIN sesuai dengan password rahasia
+    if (currentPin === correctPin) {
+      // PIN BENAR
+      pinVerified = true;
+      overlay.classList.remove("active");
+      
+      // Menyalakan audio musik secara manual pasca lolos password
+      if (typeof audio !== 'undefined') {
+        audio.play().catch(err => console.log("Audio play digagalkan browser:", err));
+      }
+      
+      // Simulasikan ulang klik love asli secara otomatis setelah password lolos
+      setTimeout(() => {
+        mainLoveBtn.click();
+      }, 100);
+      
+    } else {
+      // PIN SALAH (Bisa karena kurang dari 6 digit atau angkanya keliru)
+      pinBox.classList.add("shake");
+      dots.forEach(dot => dot.classList.add("error"));
+      
+      setTimeout(() => {
+        pinBox.classList.remove("shake");
+        currentPin = "";
+        updateDots();
+      }, 500);
+    }
+  }
+
+  function updateDots() {
+    dots.forEach((dot, index) => {
+      dot.classList.remove("error");
+      if (index < currentPin.length) {
+        dot.classList.add("filled");
+      } else {
+        dot.classList.remove("filled");
+      }
+    });
+  }
+</script> 
+</body> 
+</html>
