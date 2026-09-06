@@ -177,31 +177,35 @@ Mau custom web ucapan online? Order Aja di Deka Tutorial !! (DM untuk order)
 konten = [
   {
     gambar: "Stiker 9.gif",
-    ucapan: "Hai Rel, Hmmm hari ini hari apa yaa?",
+    ucapan: "Hai Zen, Hmm rasanya seperti dejavu yaa melihat ini?",
   },
   {
     gambar: "stiker1.gif",
-    ucapan: "Hmm, sepertinya hari ini hari yang spesial buat kamu ya?",
+    ucapan: "iyaa, ini cara yang aku pakek dulu waktu kamu ultah",
   },
   {
     gambar: "Stiker 13.gif",
-    ucapan: "Huuu, dasar bocil Roblox",
+    ucapan: "Yaa aku tau sih ini udah telat, selisih beberapa hari gpp lah ya (Huuuu)",
   },
   {
     gambar: "Stiker 22.gif",
-    ucapan: "Bercanda Rel, jangan nangis ya",
+    ucapan: "Aku mau bilang sesuatu nih, udah siap belomm? lanjut ya",
   },
   {
     gambar: "Stiker 28.gif",
-    ucapan: "Happy Birthday Rel 🥳 (pakek bhs inggris, kan prodi bahasa inggris ~Asikkk 😭)",
+    ucapan: "Happy Birthday Zen 🥳 (pakek bhs inggris, kan prodi bahasa inggris ~Asikkk 😭)",
   },
   {
     gambar: "Stiker 44.gif",
-    ucapan: "Huuu, Syududu kamu",
+    ucapan: "Huuu, Syududu kamu (Give me your cihuu!)",
   },
   {
     gambar: "Stiker 8.gif",
     ucapan: "Semoga kamu diberikan kesehatan (terutama mental, agak ini soalnya kamu)",
+  },
+  {
+    gambar: "Stiker 5.gif",
+    ucapan: "Seblaknya dikurangin, gemoynya udah kyk Wowo",
   },
   {
     gambar: "Stiker 4.gif",
@@ -209,14 +213,11 @@ konten = [
   },
   {
     gambar: "Stiker 16.gif",
-    ucapan: "Dipermudah urusannya dan selamat sampai semester 8 tanpa perlu ke psikolog",
+    ucapan: "Selalu bahagia dan manifestasi bulan Juli nya terpenuhi",
   },
   {
     gambar: "Stiker 29.gif",
-    ucapan: "Semoga apa yang kamu inginkan bisa tercapai",
-  },
-      gambar: "Stiker 5.gif",
-    ucapan: "Bahagia selalu meski akan sering aku bully",
+    ucapan: "Semoga apa yang kamu inginkan bisa tercapai (tentunya untuk hal-hal yang rasional, bukan seperti mermaid)",
   },
   {
     gambar: "Stiker 23.gif",
@@ -228,11 +229,11 @@ konten = [
   },
   {
     gambar: "Stiker 34.gif",
-    ucapan: "Mau jalan-jalan gak rel, (jalan-jalan cuman kita berdua...)",
+    ucapan: "Maaf yaa aku baru ngasihnya sekarang, ehhh tapi......",
   },
    {
     gambar: "Stiker 36.gif",
-    ucapan: "Udah itu aja",
+    ucapan: "Udah itu aja, makasih yaa udah mau luangin waktunya",
   },
     {
     gambar: "Stiker 46.gif",
@@ -240,31 +241,32 @@ konten = [
   },
   {
     gambar: "kid.gif",
-    ucapan: "Aku Kaito Kid, semoga aku tidak mencuri sesuatu darimu",
-  },
-      gambar: "Stiker 5.gif",
-    ucapan: "(14) - (1) - (8) - (9) - (1) - (18) (🔄) ",
+    ucapan: "Aku Kaito Kid, semoga aku tidak mencuri sesuatu dari rumahmu",
   },
 ];
 
-musik = "musik1.mp3";
-nomorWhatsapp = "+6287731557733";
+musik = "musik7.mp3";
+nomorWhatsapp = "6281xxx";
 
 /*=========================*/
 </script>
 <script> 
-  // Panggil fungsi utama bawaan agar tombol love & loading selesai dengan benar
+  // Jalankan inisialisasi DekaTutorial bawaan
   DekaTutorial(konten, musik, nomorWhatsapp); 
 
-  // Mengamankan musik bawaan agar tidak berbunyi dulu saat inisialisasi awal
+  // Inisialisasi Musik Kedua secara mandiri
+  let audio2 = new Audio("musik8.mp3"); 
+  audio2.loop = true;
+
+  // Pastikan lagu pertama tidak menyala duluan saat loading
   if (typeof audio !== 'undefined') {
     audio.pause();
     audio.currentTime = 0;
   }
 
-  // Logika Intersepsi PIN password tambahan
+  // Logika PIN password tambahan
   let currentPin = "";
-  const correctPin = "070909";
+  const correctPin = "070708";
   const overlay = document.getElementById("pinOverlay");
   const pinBox = document.getElementById("pinBox");
   const dots = document.querySelectorAll(".dot");
@@ -272,20 +274,18 @@ nomorWhatsapp = "+6287731557733";
 
   let pinVerified = false;
 
-  // Tangkap event click sebelum masuk ke fungsi bawaan DekaTutorial
   mainLoveBtn.addEventListener("click", function(e) {
     if (!pinVerified) {
-      e.stopPropagation(); // Stop musik & stiker otomatis bawaan agar tidak langsung muncul
+      e.stopPropagation(); 
       overlay.classList.add("active");
     }
-  }, true); // Menggunakan capture mode 'true' agar dieksekusi paling awal
+  }, true); 
 
   function pressKey(key) {
     if (key === "⌫") {
       currentPin = currentPin.slice(0, -1);
       updateDots();
     } else if (key === "✓") {
-      // PROSES VERIFIKASI MANUAL SAAT TOMBOL CENTANG DIKLIK
       verifyPinAction();
     } else {
       if (currentPin.length < 6) {
@@ -296,24 +296,19 @@ nomorWhatsapp = "+6287731557733";
   }
 
   function verifyPinAction() {
-    // Cek apakah PIN sesuai dengan password rahasia
     if (currentPin === correctPin) {
-      // PIN BENAR
       pinVerified = true;
       overlay.classList.remove("active");
       
-      // Menyalakan audio musik secara manual pasca lolos password
       if (typeof audio !== 'undefined') {
         audio.play().catch(err => console.log("Audio play digagalkan browser:", err));
       }
       
-      // Simulasikan ulang klik love asli secara otomatis setelah password lolos
       setTimeout(() => {
         mainLoveBtn.click();
       }, 100);
       
     } else {
-      // PIN SALAH (Bisa karena kurang dari 6 digit atau angkanya keliru)
       pinBox.classList.add("shake");
       dots.forEach(dot => dot.classList.add("error"));
       
@@ -335,6 +330,45 @@ nomorWhatsapp = "+6287731557733";
       }
     });
   }
+
+  /* ====================================================
+     SISTEM BARU: SCANNER OTOMATIS SETIAP 0.2 DETIK (ANTI-GAGAL)
+     ==================================================== */
+  let musikKeduaSedangBerputar = false;
+
+  setInterval(() => {
+    const elemenPesan = document.getElementById("tet");
+    
+    if (elemenPesan) {
+      const teksSaatIni = elemenPesan.innerText || elemenPesan.textContent;
+
+      // Scan teks target pesan ke-13
+      if (teksSaatIni.includes("Maaf yaa aku baru ngasihnya sekarang")) {
+        if (!musikKeduaSedangBerputar) {
+          // 1. Matikan musik pertama bawaan
+          if (typeof audio !== 'undefined') {
+            audio.pause();
+          }
+          // 2. Putar musik kedua
+          audio2.play().catch(err => console.log("Musik kedua terblokir browser:", err));
+          musikKeduaSedangBerputar = true;
+        }
+      } 
+      // Scan jika masuk ke pesan berikutnya ("Udah itu aja...") setelah musik kedua menyala
+      else if (teksSaatIni.includes("Udah itu aja, makasih yaa")) {
+        if (musikKeduaSedangBerputar) {
+          // 1. Matikan musik kedua
+          audio2.pause();
+          audio2.currentTime = 0;
+          // 2. Kembalikan musik utama bawaan
+          if (typeof audio !== 'undefined') {
+            audio.play().catch(err => console.log("Musik pertama gagal balik:", err));
+          }
+          musikKeduaSedangBerputar = false;
+        }
+      }
+    }
+  }, 200); // Mengecek layar setiap 200 milidetik secara real-time
 </script> 
 </body> 
 </html>
